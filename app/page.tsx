@@ -23,6 +23,7 @@ export default function Home() {
       <div className=" flex w-full justify-center items-center">
         <div className="flex flex-row justify-center items-center gap-6 w-full mt-5">
           <div>
+            <h2 className="text-2xl font-bold">English</h2>
             <form action="" className="flex items-center space-x-5">
               <textarea
                 name="english"
@@ -38,6 +39,7 @@ export default function Home() {
             </form>
           </div>
           <div>
+            <h2 className="text-2xl font-bold">Language</h2>
             <form action="">
               <textarea 
               name="lang" 
