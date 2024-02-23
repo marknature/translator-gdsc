@@ -1,14 +1,29 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function Home() {
-  const [lang, setLang] = useState("");
-  const [english, setEnglish] = useState("");
+  const [lang, setLang] = useState('');
+  const [english, setEnglish] = useState('');
+
+  async function query(data: { inputs: string }) {
+    const response = await fetch(
+      'https://api-inference.huggingface.co/models/icep0ps/marian-finetuned-kde4-en-to-rw',
+      {
+        headers: { Authorization: `Bearer ${process.env.MODEL_API_TOKEN}` },
+        method: 'POST',
+        body: JSON.stringify(data),
+      }
+    );
+    const result = await response.json();
+    return result;
+  }
 
   const translate = async (e: React.FormEvent) => {
     e.preventDefault();
-    setEnglish(lang)
+    query({ inputs: lang }).then((response) => {
+      setEnglish(response[0].generated_text);
+    });
   };
 
   const handleEnglishChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -33,7 +48,11 @@ export default function Home() {
                 className="border-2 border-black"
                 onChange={handleEnglishChange}
               ></textarea>
-              <button type="submit" onClick={translate} className="bg-red-500 p-1 rounded-md ">
+              <button
+                type="submit"
+                onClick={translate}
+                className="bg-red-500 p-1 rounded-md "
+              >
                 submit
               </button>
             </form>
@@ -41,14 +60,14 @@ export default function Home() {
           <div>
             <h2 className="text-2xl font-bold">Language</h2>
             <form action="">
-              <textarea 
-              name="lang" 
-              id="lang" 
-              cols={30} 
-              rows={10} 
-              className="border-2 border-black"
-              value={english}
-              readOnly
+              <textarea
+                name="lang"
+                id="lang"
+                cols={30}
+                rows={10}
+                className="border-2 border-black"
+                value={english}
+                readOnly
               ></textarea>
             </form>
           </div>
