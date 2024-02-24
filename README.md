@@ -4,7 +4,7 @@
 
 Welcome to the Translator application developed by the Google Developers Student Club at Africa University for the Google Solution Challenge 2024. This project aims to provide an efficient and user-friendly translation tool using state-of-the-art natural language processing models.
 
-## Build using
+## Built using
 
 - **Hugging Face Models**: Leveraging the power of Hugging Face's transformer models for accurate and context-aware translations.
 - **Google Colab Training**: We utilized Google Colab for model training, taking advantage of its powerful GPU support to enhance the training process.
