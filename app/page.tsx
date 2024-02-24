@@ -33,7 +33,11 @@ export default function Home() {
                 className="border-2 border-black"
                 onChange={handleEnglishChange}
               ></textarea>
-              <button type="submit" onClick={translate} className="bg-red-500 p-1 rounded-md ">
+              <button
+                type="submit"
+                onClick={translate}
+                className="bg-red-500 p-1 rounded-md "
+              >
                 submit
               </button>
             </form>
@@ -41,14 +45,14 @@ export default function Home() {
           <div>
             <h2 className="text-2xl font-bold">Language</h2>
             <form action="">
-              <textarea 
-              name="lang" 
-              id="lang" 
-              cols={30} 
-              rows={10} 
-              className="border-2 border-black"
-              value={english}
-              readOnly
+              <textarea
+                name="lang"
+                id="lang"
+                cols={30}
+                rows={10}
+                className="border-2 border-black"
+                value={english}
+                readOnly
               ></textarea>
             </form>
           </div>
