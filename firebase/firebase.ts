@@ -18,6 +18,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+let analytics: any;
+// Initialize Analytics and get a reference to the service
+if (typeof window !== 'undefined') {
+	analytics = getAnalytics(app);
+}
 
 export {analytics}
