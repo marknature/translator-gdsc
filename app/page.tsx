@@ -1,5 +1,6 @@
 'use client';
 
+import axios from 'axios';
 import { useState } from 'react';
 
 export default function Home() {
@@ -9,17 +10,15 @@ export default function Home() {
 
   async function query(data: { inputs: string }) {
     try {
-      const response = await fetch(
+      const response = await axios.post(
         'https://api-inference.huggingface.co/models/icep0ps/marian-finetuned-kde4-en-to-rw',
+        data,
         {
           headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_MODEL_API_TOKEN}` },
-          method: 'POST',
-          body: JSON.stringify(data),
         }
       );
-      const result = await response.json();
       setErrors('');
-      return result;
+      return response.data
     } catch (error) {
       throw new Error('error occured ' + error);
     }
@@ -27,17 +26,35 @@ export default function Home() {
 
   const translate = async (e: React.FormEvent) => {
     e.preventDefault();
-    query({ inputs: lang })
+    if(english === ""){
+      alert("Please enter text")
+    }else{
+      query({ inputs: english })
       .then((response) => {
-        setEnglish(response[0].generated_text);
+        setLang(response[0].generated_text);
       })
       .catch((error) => {
         setErrors('Error occured' + error);
       });
+    }
+    //typeWriter(lang)
   };
 
   const handleEnglishChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setLang(e.target.value);
+    setEnglish(e.target.value);
+  };
+
+  const typeWriter = (text: string) => {
+    var speed = 50;
+    var i = 0;
+    if (i < text.length) {
+      const langElement = document.getElementById("lang");
+      if (langElement) {
+        langElement.innerHTML += text.charAt(i);
+      }
+      i++;
+      setTimeout(typeWriter, speed);
+    }
   };
 
   return (
@@ -77,7 +94,7 @@ export default function Home() {
                 cols={30}
                 rows={10}
                 className="border-2 border-black"
-                value={english}
+                value={lang}
                 readOnly
               ></textarea>
             </form>
