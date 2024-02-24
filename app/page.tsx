@@ -3,6 +3,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { analytics } from "@/firebase/firebase";
+import { logEvent } from "firebase/analytics";
 
 export default function Home() {
   const [lang, setLang] = useState("");
@@ -10,6 +12,10 @@ export default function Home() {
   const [errors, setErrors] = useState("");
   const [loading, setLoading] = useState(false);
   const [empty, setEmpty] = useState(false);
+
+  useEffect(() => {
+    logEvent(analytics, "page_visit")
+  }, []);
 
   interface History {
     english: string;
@@ -52,10 +58,12 @@ export default function Home() {
             ...prevHistory,
             { english: english, lang: response[0].generated_text },
           ]);
+          logEvent(analytics,"translation_completed")
         })
         .catch((error) => {
           setLoading(false);
           setErrors("Error occured" + error);
+          logEvent(analytics,"server_down")
         });
     }
     //typeWriter(lang)
