@@ -87,10 +87,10 @@ export default function Home() {
   };
 
   return (
-    <div className="flex w-full h-screen bg-gradient-to-b from-cyan-500 to-blue-500  justify-center gap-10 items-center">
-      <div className=" flex flex-col w-fit justify-center items-center bg-white/50 p-4 rounded-lg backdrop-blur-sm">
-        <div className="flex flex-row justify-center items-center gap-6 w-full mt-5">
-          <div className="flex flex-row items-center gap-4 w-full">
+    <div className="flex flex-col gap-5 p-4 md:flex-row md:items-center md:h-screen md:w-full md:justify-center lg:flex lg:w-full lg:h-screen bg-gradient-to-b from-cyan-500 to-blue-500  lg:justify-center lg:gap-10 lg:items-center">
+      <div className=" flex flex-col w-72 lg:flex lg:flex-col lg:w-fit lg:justify-center lg:items-center bg-white/50 p-4 rounded-lg backdrop-blur-sm">
+        <div className="columns-1 items-center lg:flex lg:flex-row lg:justify-center lg:items-center lg:gap-6 w-full mt-5">
+          <div className=" flex flex-col items-center gap-3 lg:flex lg:flex-row lg:items-center lg:gap-4 w-full">
             <div className="flex gap-2 w-52 border-2 border-black p-2 rounded-md">
               <Image
                 src={"/assets/english.png"}
@@ -136,7 +136,7 @@ export default function Home() {
         </div>
         <div className="space-y-3 mt-2">
           <div>
-            <form onSubmit={translate} className="flex items-center space-x-5">
+            <form className="flex items-center space-x-5">
               <textarea
                 name="english"
                 id="english"
@@ -149,7 +149,7 @@ export default function Home() {
             </form>
           </div>
           <div>
-            <form action="">
+            <form className="flex items-center space-x-5">
               <textarea
                 name="lang"
                 id="lang"
@@ -174,7 +174,7 @@ export default function Home() {
           )}
         </div>
       </div>
-      <div className="flex flex-col bg-white/50 backdrop-blur-md p-4 rounded-lg h-96 w-80 overflow-y-auto overflow-x-hidden ">
+      <div className="flex flex-col bg-white/50 backdrop-blur-md p-4 rounded-lg h-96 w-72 md:w-64 lg:w-80 overflow-y-auto overflow-x-hidden ">
         <h1 className="font-primary">Previous Translations:</h1>
         {history.map((item, index) => (
           <div key={index} className="row">
