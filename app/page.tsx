@@ -87,7 +87,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col gap-5 p-4 md:flex-col md:items-center md:h-screen md:w-full md:justify-center lg:flex-row lg:w-full lg:h-screen bg-gradient-to-b from-cyan-500 to-blue-500  lg:justify-center lg:gap-10 lg:items-center">
+    <div className="flex flex-col items-center gap-5 p-4 md:flex-col md:items-center md:h-screen md:w-full md:justify-center lg:flex-row lg:w-full lg:h-screen bg-gradient-to-b from-cyan-500 to-blue-500  lg:justify-center lg:gap-10 lg:items-center">
       <div className=" flex flex-col w-72 md:w-fit lg:flex lg:flex-col lg:w-fit lg:justify-center lg:items-center bg-white/50 p-4 rounded-lg backdrop-blur-sm">
         <div className="columns-1 items-center lg:flex lg:flex-row lg:justify-center lg:items-center lg:gap-6 w-full mt-5">
           <div className=" flex flex-col items-center gap-3 md:flex-row lg:flex lg:flex-row lg:items-center lg:gap-4 w-full">
