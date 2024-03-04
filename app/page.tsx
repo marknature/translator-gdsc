@@ -79,10 +79,10 @@ export default function Home() {
       {/* heading start */}
       <div className="flex justify-center gap-5">
         <div className="flex flex-col items-center w-full">
-          <h1 className="text-7xl font-bold">
+          <h1 className="text-3xl md:text-5xl lg:text-7xl font-bold">
             Translate <span className="text-red-600">Africa</span>
           </h1>
-          <h1 className="font-bold text-2xl text-gray-700">
+          <h1 className="font-bold text-sm md:text-lg lg:text-2xl text-gray-700">
             Google Solution Challenge 2024
           </h1>
         </div>
@@ -93,7 +93,7 @@ export default function Home() {
       {/* heading end */}
 
       {/* project start */}
-      <div className="w-[600px] text-center mt-5 text-wrap mb-5">
+      <div className="lg:w-[600px] text-center mt-5 text-wrap mb-5">
         <article>
           This is a Translator application developed by the Google Developers
           Student Club at Africa University for the Google Solution Challenge
@@ -112,7 +112,7 @@ export default function Home() {
 
       {/* Translation start */}
       <div className="flex items-start mt-10">
-        <div className="flex gap-5">
+        <div className="flex flex-col md:flex-row lg:flex-row gap-5">
           <div className="flex flex-col items-start">
             <h1 className="bg-red-600 py-3 px-5 rounded-xl text-white">
               English
@@ -141,7 +141,7 @@ export default function Home() {
           </div>
           <div className="flex justify-center items-center">
             <button
-              className="absolute bg-red-600 py-4 px-5 rounded-lg h-fit"
+              className="md:absolute lg:absolute bg-red-600 py-4 px-5 rounded-lg h-fit"
               onClick={translate}
             >
               <svg
@@ -182,9 +182,9 @@ export default function Home() {
       {/* Translation end */}
 
       {/* history start */}
-      <div className="flex flex-col items-start w-[640px] mt-10">
+      <div className="flex flex-col items-start lg:w-[640px] mt-10">
         <h1 className="font-bold text-xl underline p-2 ">History</h1>
-        <div className=" grid grid-cols-2 p-2 gap-7">
+        <div className="flex flex-col md:grid md:grid-cols-2 lg:grid lg:grid-cols-2 p-2 gap-7">
           {history.map((item, index) => (
             <Card lang={item.lang} english={item.english} key={index}/>
           ))}
