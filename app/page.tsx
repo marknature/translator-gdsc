@@ -71,11 +71,10 @@ export default function Home() {
           logEvent(analytics, 'server_down');
         });
     }
-    //typeWriter(lang)
   };
 
   const handleEnglishChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEnglish(e.target.value);
+    setEnglish(e.target.value.toLowerCase());
   };
 
   return (
@@ -91,7 +90,7 @@ export default function Home() {
           </h1>
         </div>
         <div>
-          <Image src="/assets/logo.png" alt="" />
+          <Image src="/assets/logo.png" width={75} height={75} alt="" />
         </div>
       </div>
       {/* heading end */}
@@ -109,7 +108,7 @@ export default function Home() {
         href="https://github.com/Aubrey-Tsorayi/translator-gdsc/tree/main"
         target="_blank"
       >
-        <Image src="/assets/github.png" className="scale-75" alt="" />
+        <Image src="/assets/github.png" width={75} height={75} className="scale-75" alt="" />
       </a>
       {/* project end */}
 
