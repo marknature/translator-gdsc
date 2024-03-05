@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import axios from "axios";
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { analytics } from "@/firebase/firebase";
-import { logEvent } from "firebase/analytics";
-import Card from "@/components/Card";
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { analytics } from '@/firebase/firebase';
+import { logEvent } from 'firebase/analytics';
+import Card from '@/components/Card';
+import Image from 'next/image';
 
 export default function Home() {
-  const [lang, setLang] = useState("");
-  const [english, setEnglish] = useState("");
-  const [errors, setErrors] = useState("");
+  const [lang, setLang] = useState('');
+  const [english, setEnglish] = useState('');
+  const [errors, setErrors] = useState('');
   const [loading, setLoading] = useState(false);
   const [empty, setEmpty] = useState(false);
 
   useEffect(() => {
-    logEvent(analytics, "page_visit");
+    logEvent(analytics, 'page_visit');
   }, []);
 
   interface History {
@@ -25,28 +25,32 @@ export default function Home() {
 
   const [history, setHistory] = useState<History[]>([]);
 
-  async function query(data: { inputs: string }) {
+  async function query(
+    data: { inputs: string },
+    translation: 'en-rn' | 'rn-en' = 'en-rn'
+  ) {
     try {
-      const response = await axios.post(
-        "https://api-inference.huggingface.co/models/icep0ps/marian-finetuned-kde4-en-to-rw",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_MODEL_API_TOKEN}`,
-          },
-        }
-      );
-      setErrors("");
+      const endpoint =
+        translation === 'rn-en'
+          ? 'https://api-inference.huggingface.co/models/icep0ps/rn-en'
+          : 'https://api-inference.huggingface.co/models/icep0ps/marian-finetuned-kde4-en-to-rw';
+
+      const response = await axios.post(endpoint, data, {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_MODEL_API_TOKEN}`,
+        },
+      });
+      setErrors('');
       return response.data;
     } catch (error) {
-      throw new Error("error occured " + error);
+      throw new Error('error occured ' + error);
     }
   }
 
   const translate = async (e: React.FormEvent) => {
     setLoading(true);
     e.preventDefault();
-    if (english === "") {
+    if (english === '') {
       setEmpty(true);
       setLoading(false);
     } else {
@@ -59,12 +63,12 @@ export default function Home() {
             ...prevHistory,
             { english: english, lang: response[0].generated_text },
           ]);
-          logEvent(analytics, "translation_completed");
+          logEvent(analytics, 'translation_completed');
         })
         .catch((error) => {
           setLoading(false);
-          setErrors("Error occured" + error);
-          logEvent(analytics, "server_down");
+          setErrors('Error occured' + error);
+          logEvent(analytics, 'server_down');
         });
     }
     //typeWriter(lang)
@@ -87,7 +91,7 @@ export default function Home() {
           </h1>
         </div>
         <div>
-          <img src="/assets/logo.png" alt="" />
+          <Image src="/assets/logo.png" alt="" />
         </div>
       </div>
       {/* heading end */}
@@ -95,18 +99,17 @@ export default function Home() {
       {/* project start */}
       <div className="lg:w-[600px] text-center mt-5 text-wrap mb-5">
         <article>
-          This is a Translator application developed by the Google Developers
-          Student Club at Africa University for the Google Solution Challenge
-          2024. This project aims to provide an efficient and user-friendly
-          translation tool using state-of-the-art natural language processing
-          models
+          This is a Translator application developed by the Google Developers Student Club
+          at Africa University for the Google Solution Challenge 2024. This project aims
+          to provide an efficient and user-friendly translation tool using
+          state-of-the-art natural language processing models
         </article>
       </div>
       <a
         href="https://github.com/Aubrey-Tsorayi/translator-gdsc/tree/main"
         target="_blank"
       >
-        <img src="/assets/github.png" className="scale-75" alt="" />
+        <Image src="/assets/github.png" className="scale-75" alt="" />
       </a>
       {/* project end */}
 
@@ -114,9 +117,7 @@ export default function Home() {
       <div className="flex items-start mt-10">
         <div className="flex flex-col md:flex-row lg:flex-row gap-5">
           <div className="flex flex-col items-start">
-            <h1 className="bg-red-600 py-3 px-5 rounded-xl text-white">
-              English
-            </h1>
+            <h1 className="bg-red-600 py-3 px-5 rounded-xl text-white">English</h1>
             <form className="mt-5">
               <textarea
                 name="english"
@@ -161,9 +162,7 @@ export default function Home() {
             </button>
           </div>
           <div className="flex flex-col items-start">
-            <h1 className="bg-red-600 py-3 px-5 rounded-xl text-white">
-              Kirundi
-            </h1>
+            <h1 className="bg-red-600 py-3 px-5 rounded-xl text-white">Kirundi</h1>
             <form className="mt-5">
               <textarea
                 name="lang"
@@ -171,7 +170,7 @@ export default function Home() {
                 cols={30}
                 rows={10}
                 placeholder="Translation will appear here"
-                value={loading === true ? "Translating..." : lang}
+                value={loading === true ? 'Translating...' : lang}
                 className=" w-full p-5 rounded-xl bg-gray-300"
                 readOnly
               ></textarea>
@@ -186,7 +185,7 @@ export default function Home() {
         <h1 className="font-bold text-xl underline p-2 ">History</h1>
         <div className="flex flex-col md:grid md:grid-cols-2 lg:grid lg:grid-cols-2 p-2 gap-7">
           {history.map((item, index) => (
-            <Card lang={item.lang} english={item.english} key={index}/>
+            <Card lang={item.lang} english={item.english} key={index} />
           ))}
         </div>
       </div>
