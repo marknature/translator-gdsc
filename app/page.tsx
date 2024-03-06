@@ -35,11 +35,20 @@ export default function Home() {
           ? 'https://api-inference.huggingface.co/models/icep0ps/rn-en'
           : 'https://api-inference.huggingface.co/models/icep0ps/marian-finetuned-kde4-en-to-rw';
 
-      const response = await axios.post(endpoint, data, {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_MODEL_API_TOKEN}`,
+      const response = await axios.post(
+        endpoint,
+        {
+          inputs: data.inputs,
+          options: {
+            wait_for_model: true,
+          },
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_MODEL_API_TOKEN}`,
+          },
+        }
+      );
       setErrors('');
       return response.data;
     } catch (error) {
@@ -108,7 +117,13 @@ export default function Home() {
         href="https://github.com/Aubrey-Tsorayi/translator-gdsc/tree/main"
         target="_blank"
       >
-        <Image src="/assets/github.png" width={75} height={75} className="scale-75" alt="" />
+        <Image
+          src="/assets/github.png"
+          width={75}
+          height={75}
+          className="scale-75"
+          alt=""
+        />
       </a>
       {/* project end */}
 
