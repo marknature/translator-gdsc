@@ -1,13 +1,18 @@
+import React, {useMemo} from "react";
+
 interface CardProps {
     english: string;
     lang: string;
+    language: string;
+    translation: string;
 }
 
-export default function Card({ lang, english }: { lang: string; english: string }) {
-  return (
+const Card: React.FC<CardProps> = ({ lang, english, language, translation }: { lang: string; english: string, language: string, translation : string }) => {
+
+  const memoizedCard = useMemo(() =>(
     <div className="bg-gray-400 p-5 rounded-lg w-80">
       <h1 className="flex items-center text-white bg-red-600 p-2 rounded-lg w-32">
-        English
+        {language.toLowerCase()}
         <span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +29,7 @@ export default function Card({ lang, english }: { lang: string; english: string 
             />
           </svg>
         </span>
-        Kirundi
+        {translation.toLowerCase()}
       </h1>
       <h2 className="mt-3 font-bold text-wrap">
         {lang}
@@ -34,5 +39,10 @@ export default function Card({ lang, english }: { lang: string; english: string 
         {english}
       </h3>
     </div>
-  );
+  ),
+  [lang, english])
+    
+  return memoizedCard
 }
+
+export default Card;

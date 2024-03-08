@@ -1,23 +1,49 @@
-'use client';
+"use client";
 
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { analytics } from '@/firebase/firebase';
-import { logEvent } from 'firebase/analytics';
-import Card from '@/components/Card';
-import Image from 'next/image';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { analytics } from "@/firebase/firebase";
+import { logEvent } from "firebase/analytics";
+import Card from "@/components/Card";
+import Image from "next/image";
 
 export default function Home() {
-  const [lang, setLang] = useState('');
-  const [english, setEnglish] = useState('');
-  const [errors, setErrors] = useState('');
+  // states
+  const [lang, setLang] = useState("");
+  const [english, setEnglish] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // handling page erros
+  const [errors, setErrors] = useState("");
   const [empty, setEmpty] = useState(false);
+  const [same, setSame] = useState(false); // can't translate same langauage
+
+  // handle selecting of languages
+  const [language, setLanguage] = useState("English"); // default is english
+  const [translation, setTranslation] = useState("Kirundi"); // default kirundi
+
+  const checkTranslationLanguage = () => {
+    if (
+      language.toLowerCase() === "english" &&
+      translation.toLowerCase() === "kirundi"
+    ) {
+      return "en-rn";
+    } else if (
+      language.toLowerCase() === "kirundi" &&
+      translation.toLowerCase() === "english"
+    ) {
+      return "rn-en";
+    } else {
+      setSame(true);
+      return "";
+    }
+  };
 
   useEffect(() => {
-    logEvent(analytics, 'page_visit');
+    logEvent(analytics, "page_visit");
   }, []);
 
+  // History type
   interface History {
     english: string;
     lang: string;
@@ -26,14 +52,14 @@ export default function Home() {
   const [history, setHistory] = useState<History[]>([]);
 
   async function query(
-    data: { inputs: string },
-    translation: 'en-rn' | 'rn-en' = 'en-rn'
+    data: { inputs: string }
+    //translation: "en-rn" | "rn-en" = "en-rn"
   ) {
     try {
       const endpoint =
-        translation === 'rn-en'
-          ? 'https://api-inference.huggingface.co/models/icep0ps/rn-en'
-          : 'https://api-inference.huggingface.co/models/icep0ps/marian-finetuned-kde4-en-to-rw';
+        checkTranslationLanguage() === "rn-en"
+          ? "https://api-inference.huggingface.co/models/icep0ps/rn-en"
+          : "https://api-inference.huggingface.co/models/icep0ps/marian-finetuned-kde4-en-to-rw";
 
       const response = await axios.post(
         endpoint,
@@ -49,21 +75,25 @@ export default function Home() {
           },
         }
       );
-      setErrors('');
       return response.data;
     } catch (error) {
-      throw new Error('error occured ' + error);
+      throw new Error("error occured " + error);
     }
   }
 
   const translate = async (e: React.FormEvent) => {
     setLoading(true);
     e.preventDefault();
-    if (english === '') {
+    if (english === "") {
       setEmpty(true);
+      setLoading(false);
+    } else if (checkTranslationLanguage() === "") {
+      setSame(true);
+      //setEmpty(false)
       setLoading(false);
     } else {
       setEmpty(false);
+      setSame(false);
       query({ inputs: english })
         .then((response) => {
           setLoading(false);
@@ -72,12 +102,12 @@ export default function Home() {
             ...prevHistory,
             { english: english, lang: response[0].generated_text },
           ]);
-          logEvent(analytics, 'translation_completed');
+          logEvent(analytics, "translation_completed");
         })
         .catch((error) => {
           setLoading(false);
-          setErrors('Error occured' + error);
-          logEvent(analytics, 'server_down');
+          setErrors("Error occured" + error);
+          logEvent(analytics, "server_down");
         });
     }
   };
@@ -107,10 +137,11 @@ export default function Home() {
       {/* project start */}
       <div className="lg:w-[600px] text-center mt-5 text-wrap mb-5">
         <article>
-          This is a Translator application developed by the Google Developers Student Club
-          at Africa University for the Google Solution Challenge 2024. This project aims
-          to provide an efficient and user-friendly translation tool using
-          state-of-the-art natural language processing models
+          This is a Translator application developed by the Google Developers
+          Student Club at Africa University for the Google Solution Challenge
+          2024. This project aims to provide an efficient and user-friendly
+          translation tool using state-of-the-art natural language processing
+          models
         </article>
       </div>
       <a
@@ -131,7 +162,16 @@ export default function Home() {
       <div className="flex items-start mt-10">
         <div className="flex flex-col md:flex-row lg:flex-row gap-5">
           <div className="flex flex-col items-start">
-            <h1 className="bg-red-600 py-3 px-5 rounded-xl text-white">English</h1>
+            <select
+              className="bg-red-600 py-3 px-5 rounded-xl text-white"
+              value={language}
+              onChange={(e) => {
+                setLanguage(e.target.value);
+              }}
+            >
+              <option value="English">English</option>
+              <option value="Kirundi">Kirundi</option>
+            </select>
             <form className="mt-5">
               <textarea
                 name="english"
@@ -152,11 +192,16 @@ export default function Home() {
                   <span>Please enter some text</span>
                 </div>
               )}
+              {same && (
+                <div className="text-red-500">
+                  <span>Can not translate to the same langauage</span>
+                </div>
+              )}
             </form>
           </div>
           <div className="flex justify-center items-center">
             <button
-              className="md:absolute lg:absolute bg-red-600 py-4 px-5 rounded-lg h-fit"
+              className="md:absolute lg:absolute bg-red-600 py-4 flex items-center gap-1 text-white px-5 rounded-lg h-fit"
               onClick={translate}
             >
               <svg
@@ -173,10 +218,20 @@ export default function Home() {
                   d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
                 />
               </svg>
+              <p className="text-sm">Translate</p>
             </button>
           </div>
           <div className="flex flex-col items-start">
-            <h1 className="bg-red-600 py-3 px-5 rounded-xl text-white">Kirundi</h1>
+            <select
+              className="bg-red-600 py-3 px-5 rounded-xl text-white"
+              value={translation}
+              onChange={(e) => {
+                setTranslation(e.target.value);
+              }}
+            >
+              <option value="Kirundi">Kirundi</option>
+              <option value="English">English</option>
+            </select>
             <form className="mt-5">
               <textarea
                 name="lang"
@@ -184,7 +239,7 @@ export default function Home() {
                 cols={30}
                 rows={10}
                 placeholder="Translation will appear here"
-                value={loading === true ? 'Translating...' : lang}
+                value={loading === true ? "Translating..." : lang}
                 className=" w-full p-5 rounded-xl bg-gray-300"
                 readOnly
               ></textarea>
@@ -199,7 +254,7 @@ export default function Home() {
         <h1 className="font-bold text-xl underline p-2 ">History</h1>
         <div className="flex flex-col md:grid md:grid-cols-2 lg:grid lg:grid-cols-2 p-2 gap-7">
           {history.map((item, index) => (
-            <Card lang={item.lang} english={item.english} key={index} />
+            <Card lang={item.lang} english={item.english} language={language} translation={translation} key={index} />
           ))}
         </div>
       </div>
