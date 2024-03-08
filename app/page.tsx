@@ -45,7 +45,6 @@ export default function Home() {
     logEvent(analytics, "page_visit");
   }, []);
 
-
   const [history, setHistory] = useState<History[]>([]);
 
   const translate = async (e: React.FormEvent) => {
@@ -232,6 +231,22 @@ export default function Home() {
         </div>
       </div>
       {/* history end */}
+      <a href="#" className="fixed bottom-10 right-10 bg-red-600 p-2 text-white rounded-lg animate-bounce">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18"
+          />
+        </svg>
+      </a>
     </div>
   );
 }
