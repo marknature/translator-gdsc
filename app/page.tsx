@@ -1,11 +1,12 @@
 "use client";
 
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { analytics } from "@/firebase/firebase";
 import { logEvent } from "firebase/analytics";
 import Card from "@/components/Card";
 import Image from "next/image";
+import query from "@/api/translationApi";
+import { History } from "@/types/historyTypes";
 
 export default function Home() {
   // states
@@ -39,47 +40,13 @@ export default function Home() {
     }
   };
 
+  // logging page vists
   useEffect(() => {
     logEvent(analytics, "page_visit");
   }, []);
 
-  // History type
-  interface History {
-    english: string;
-    lang: string;
-  }
 
   const [history, setHistory] = useState<History[]>([]);
-
-  async function query(
-    data: { inputs: string }
-    //translation: "en-rn" | "rn-en" = "en-rn"
-  ) {
-    try {
-      const endpoint =
-        checkTranslationLanguage() === "rn-en"
-          ? "https://api-inference.huggingface.co/models/icep0ps/rn-en"
-          : "https://api-inference.huggingface.co/models/icep0ps/marian-finetuned-kde4-en-to-rw";
-
-      const response = await axios.post(
-        endpoint,
-        {
-          inputs: data.inputs,
-          options: {
-            wait_for_model: true,
-          },
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_MODEL_API_TOKEN}`,
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      throw new Error("error occured " + error);
-    }
-  }
 
   const translate = async (e: React.FormEvent) => {
     setLoading(true);
@@ -94,7 +61,7 @@ export default function Home() {
     } else {
       setEmpty(false);
       setSame(false);
-      query({ inputs: english })
+      query({ inputs: english }, checkTranslationLanguage())
         .then((response) => {
           setLoading(false);
           setLang(response[0].generated_text);
@@ -254,10 +221,17 @@ export default function Home() {
         <h1 className="font-bold text-xl underline p-2 ">History</h1>
         <div className="flex flex-col md:grid md:grid-cols-2 lg:grid lg:grid-cols-2 p-2 gap-7">
           {history.map((item, index) => (
-            <Card lang={item.lang} english={item.english} language={language} translation={translation} key={index} />
+            <Card
+              lang={item.lang}
+              english={item.english}
+              language={language}
+              translation={translation}
+              key={index}
+            />
           ))}
         </div>
       </div>
+      {/* history end */}
     </div>
   );
 }

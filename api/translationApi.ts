@@ -1,10 +1,10 @@
 import axios from "axios";
 
-let response: any
+//let translation: any
 
-async function query(
+export default async function query(
     data: { inputs: string },
-    translation: "en-rn" | "rn-en" = "en-rn"
+    translation: string
   ) {
     try {
       const endpoint =

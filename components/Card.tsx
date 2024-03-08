@@ -1,11 +1,5 @@
+import { CardProps } from "@/types/cardTypes";
 import React, {useMemo} from "react";
-
-interface CardProps {
-    english: string;
-    lang: string;
-    language: string;
-    translation: string;
-}
 
 const Card: React.FC<CardProps> = ({ lang, english, language, translation }: { lang: string; english: string, language: string, translation : string }) => {
 
