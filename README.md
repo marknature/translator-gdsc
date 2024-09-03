@@ -45,7 +45,7 @@ Before running the application, ensure you have the following installed:
    npm run dev
    ```
 
-   Visit `http://localhost:3000` in your browser to access the Translator application.
+   Visit `https://translator-gdsc.vercel.app/` in your browser to access the Translator application.
 
 ## License
 
@@ -57,5 +57,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Hugging Face for their powerful transformer models
 - Google Colab for providing GPU support during model training
 - Next.js for the efficient and responsive frontend development
+- GD24- Solution challange
+  - The mission of the Solution Challenge is to solve for one or more of the United Nations' 17 Sustainable Development Goals using Google technology.
 
 Thank you for using our Translator application! If you have any questions or feedback, feel free to reach out to us.
